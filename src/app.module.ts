@@ -21,6 +21,7 @@ import { LeaderboardEntity } from './database/entities/leaderboard.entity';
 import { MatchsEntity } from './database/entities/match.entity';
 import { TourmentParticipantsEntity } from './database/entities/tournamentParticipants.entity';
 import { PlayersModule } from './modules/players/players.module';
+import { TourmentParticipantsModule } from './modules/tourment-participants/tourment-participants.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { PlayersModule } from './modules/players/players.module';
     AdminsModule,
     MyConfigModule,
     PlayersModule,
+    TourmentParticipantsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

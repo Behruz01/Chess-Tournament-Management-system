@@ -17,40 +17,92 @@ export class TourmentsService {
   ) {}
 
   async create(createTourmentDto: CreateTourmentDto): Promise<TourmentEntity> {
-    const tourment = this.repo.create(createTourmentDto);
-    return this.repo.save(tourment);
+    try {
+      const tourment = this.repo.create(createTourmentDto);
+      return await this.repo.save(tourment);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'An error occurred while fetching players',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async findAll(): Promise<TourmentEntity[]> {
-    return this.repo.find();
+    try {
+      return await this.repo.find();
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'An error occurred while fetching players',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async findOne(id: string): Promise<TourmentEntity> {
-    const tourment = await this.repo.findOne({ where: { id } });
-    if (!tourment) {
-      throw new NotFoundException(`Tournament with ID ${id} not found`);
+    try {
+      const tourment = await this.repo.findOne({ where: { id } });
+      if (!tourment) {
+        throw new NotFoundException(`Tournament with ID ${id} not found`);
+      }
+      return tourment;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'An error occurred while fetching players',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-    return tourment;
   }
 
   async update(
     id: string,
     updateTourmentDto: UpdateTourmentDto,
-  ): Promise<Object> {
-    const data = await this.repo.findOne({ where: { id } });
-    if (!data)
-      throw new HttpException('Data not found!', HttpStatus.BAD_REQUEST);
-    const { tourment_name, start_date, end_date } = updateTourmentDto;
+  ): Promise<{ message: string }> {
+    try {
+      const existingTourment = await this.repo.findOne({ where: { id } });
+      if (!existingTourment) {
+        throw new NotFoundException(`Tournament with ID ${id} not found`);
+      }
 
-    await this.repo.update({ id }, { tourment_name, start_date, end_date });
-    return { message: 'Tourment updated successfully' };
+      const { tourment_name, start_date, end_date } = updateTourmentDto;
+      await this.repo.update({ id }, { tourment_name, start_date, end_date });
+
+      return { message: 'Tournament updated successfully' };
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'An error occurred while fetching players',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  async remove(id: string): Promise<Object> {
-    const result = await this.repo.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`Tournament with ID ${id} not found`);
+  async remove(id: string): Promise<{ message: string }> {
+    try {
+      const result = await this.repo.delete(id);
+      if (result.affected === 0) {
+        throw new NotFoundException(`Tournament with ID ${id} not found`);
+      }
+      return { message: 'Tournament deleted successfully' };
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'An error occurred while fetching players',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-    return { message: 'Tourment deleted successfully' };
   }
 }
