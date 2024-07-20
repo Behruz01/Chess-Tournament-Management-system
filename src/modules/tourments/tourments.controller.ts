@@ -18,9 +18,9 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 
-@ApiTags('Tourments')
+@ApiTags('Tournaments')
 @ApiBearerAuth()
-@Controller('tourments')
+@Controller('tournaments')
 export class TourmentsController {
   constructor(private readonly tourmentsService: TourmentsService) {}
 

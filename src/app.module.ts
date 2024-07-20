@@ -23,6 +23,7 @@ import { TourmentParticipantsEntity } from './database/entities/tournamentPartic
 import { PlayersModule } from './modules/players/players.module';
 import { TourmentParticipantsModule } from './modules/tourment-participants/tourment-participants.module';
 import { MatchsModule } from './modules/matchs/matchs.module';
+import { LeaderboardsModule } from './modules/leaderboards/leaderboards.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { MatchsModule } from './modules/matchs/matchs.module';
     PlayersModule,
     TourmentParticipantsModule,
     MatchsModule,
+    LeaderboardsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
