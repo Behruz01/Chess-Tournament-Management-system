@@ -17,8 +17,8 @@ async function bootstrap() {
     }),
   );
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Article website')
-    .setDescription('The article.uz website API documentation')
+    .setTitle('Chess Tourment Management System website')
+    .setDescription('The chessms.uz website API documentation')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

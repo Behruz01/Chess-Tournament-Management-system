@@ -1,34 +1,53 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { LoginDto, LogoutDto } from './dto/create-auth.dto';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @Post('login')
+  @ApiOperation({ summary: 'User login' })
+  @ApiBody({ type: LoginDto })
+  @ApiResponse({ status: 200, description: 'User logged in successfully' })
+  login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  @Post('logout')
+  @ApiOperation({ summary: 'Admin login' })
+  @ApiBody({ type: LoginDto })
+  @ApiResponse({ status: 200, description: 'User logout successfully' })
+  logout(@Body() logoutDto: LogoutDto) {
+    return this.authService.logout(logoutDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
+  @Post('register')
+  @ApiOperation({ summary: 'User register' })
+  @ApiBody({ type: LoginDto })
+  @ApiResponse({ status: 200, description: 'User logged in successfully' })
+  register(@Body() loginDto: LoginDto) {
+    return this.authService.register(loginDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
+  @Post('refresh-token')
+  @ApiOperation({ summary: 'refresh token' })
+  @ApiBody({ type: LogoutDto })
+  @ApiResponse({ status: 200, description: 'User logged in successfully' })
+  refresh(@Body() tokenDto: LogoutDto) {
+    return this.authService.refresh(tokenDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  @Post('superadminlogin')
+  @ApiOperation({ summary: 'SuperAdmin login' })
+  @ApiBody({ type: LoginDto })
+  @ApiResponse({
+    status: 200,
+    description: 'SuperAdmin logged in successfully',
+  })
+  adminLogin(@Body() loginDto: LoginDto) {
+    return this.authService.superadminLogin(loginDto);
   }
 }
