@@ -12,6 +12,7 @@ import {
   CustomError,
   ExtendedJwtPayload,
 } from 'src/common/interfaces/custom.interface';
+import { userObject } from 'src/common/interfaces/user.interface';
 
 @Injectable()
 export class AuthService {
@@ -20,20 +21,28 @@ export class AuthService {
     private configService: MyConfigService,
   ) {}
 
-  createAccessToken(id: string): string {
-    return jwt.sign({ id }, this.configService.jwtSecretKey, {
-      expiresIn: '10m',
-    });
+  createAccessToken(user: userObject): string {
+    return jwt.sign(
+      { id: user.id, role: user.role },
+      this.configService.jwtSecretKey,
+      {
+        expiresIn: '10m',
+      },
+    );
   }
 
-  async createRefreshToken(id: string): Promise<string> {
+  async createRefreshToken(user: userObject): Promise<string> {
     const client = createClient();
     client.on('error', (err) => console.log('Redis Client Error', err));
     await client.connect();
 
-    const refreshToken = jwt.sign({ id }, this.configService.jwtSecretKey, {
-      expiresIn: '10h',
-    });
+    const refreshToken = jwt.sign(
+      { id: user.id, role: user.role },
+      this.configService.jwtSecretKey,
+      {
+        expiresIn: '10h',
+      },
+    );
 
     const payload = jwt.verify(
       refreshToken,
@@ -61,8 +70,8 @@ export class AuthService {
     if (!verifyPass)
       throw new HttpException('Invalid password', HttpStatus.BAD_REQUEST);
 
-    const accessToken = this.createAccessToken(findUser.id);
-    const refreshToken = await this.createRefreshToken(findUser.id);
+    const accessToken = this.createAccessToken(findUser);
+    const refreshToken = await this.createRefreshToken(findUser);
     return { accessToken, refreshToken };
   }
 
@@ -111,8 +120,8 @@ export class AuthService {
     const newUser = this.userRepo.create({ email, password: hashedPassword });
     await this.userRepo.save(newUser);
 
-    const accessToken = this.createAccessToken(newUser.id);
-    const refreshToken = await this.createRefreshToken(newUser.id);
+    const accessToken = this.createAccessToken(newUser);
+    const refreshToken = await this.createRefreshToken(newUser);
     return { accessToken, refreshToken };
   }
 
@@ -138,7 +147,7 @@ export class AuthService {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
 
-    const newAccessToken = this.createAccessToken(payload.id);
+    const newAccessToken = this.createAccessToken(payload);
     await client.disconnect();
 
     return { accessToken: newAccessToken };
@@ -177,8 +186,8 @@ export class AuthService {
         throw new HttpException('Invalid password', HttpStatus.BAD_REQUEST);
       }
 
-      const accessToken = this.createAccessToken(findAdmin.id);
-      const refreshToken = await this.createRefreshToken(findAdmin.id);
+      const accessToken = this.createAccessToken(findAdmin);
+      const refreshToken = await this.createRefreshToken(findAdmin);
       return { accessToken, refreshToken };
     } catch (error) {
       const customError = error as CustomError;

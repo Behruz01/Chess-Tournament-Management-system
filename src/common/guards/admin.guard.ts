@@ -6,6 +6,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { CustomError } from '../interfaces/custom.interface';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
