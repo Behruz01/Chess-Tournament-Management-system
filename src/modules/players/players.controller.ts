@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -17,6 +18,7 @@ import { PlayersService } from './players.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { PlayersEntity } from 'src/database/entities/players.entity';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @ApiTags('Players')
 @ApiBearerAuth()
@@ -24,6 +26,7 @@ import { PlayersEntity } from 'src/database/entities/players.entity';
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
 
+  @UseGuards(AdminGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new player' })
   @ApiResponse({
@@ -59,6 +62,7 @@ export class PlayersController {
     return this.playersService.findOne(id);
   }
 
+  @UseGuards(AdminGuard)
   @Patch(':id')
   @ApiOperation({ summary: 'Update a player by id' })
   @ApiResponse({
@@ -71,6 +75,7 @@ export class PlayersController {
     return this.playersService.update(id, updatePlayerDto);
   }
 
+  @UseGuards(AdminGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a player by id' })
   @ApiResponse({

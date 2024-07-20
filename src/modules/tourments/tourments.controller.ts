@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { TourmentsService } from './tourments.service';
 import { CreateTourmentDto } from './dto/create-tourment.dto';
@@ -17,6 +18,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @ApiTags('Tournaments')
 @ApiBearerAuth()
@@ -27,6 +29,7 @@ export class TourmentsController {
   @ApiOperation({ summary: 'Create a new tournament' })
   @ApiResponse({ status: 201, description: 'Tournament created successfully' })
   @ApiResponse({ status: 400, description: 'Invalid data' })
+  @UseGuards(AdminGuard)
   @Post()
   create(@Body() createTourmentDto: CreateTourmentDto) {
     return this.tourmentsService.create(createTourmentDto);
@@ -53,6 +56,7 @@ export class TourmentsController {
   @ApiResponse({ status: 200, description: 'Tournament updated successfully' })
   @ApiResponse({ status: 404, description: 'Tournament not found' })
   @ApiResponse({ status: 400, description: 'Invalid data' })
+  @UseGuards(AdminGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -65,6 +69,7 @@ export class TourmentsController {
   @ApiParam({ name: 'id', description: 'Tournament ID' })
   @ApiResponse({ status: 200, description: 'Tournament deleted successfully' })
   @ApiResponse({ status: 404, description: 'Tournament not found' })
+  @UseGuards(AdminGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.tourmentsService.remove(id);

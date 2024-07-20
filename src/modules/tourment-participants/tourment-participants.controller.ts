@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -17,6 +18,7 @@ import { TourmentParticipantsService } from './tourment-participants.service';
 import { CreateTourmentParticipantDto } from './dto/create-tourment-participant.dto';
 import { UpdateTourmentParticipantDto } from './dto/update-tourment-participant.dto';
 import { TourmentParticipantsEntity } from 'src/database/entities/tournamentParticipants.entity';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @ApiTags('Tourment-participants')
 @ApiBearerAuth()
@@ -26,6 +28,7 @@ export class TourmentParticipantsController {
     private readonly tourmentParticipantsService: TourmentParticipantsService,
   ) {}
 
+  @UseGuards(AdminGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new tourment participant' })
   @ApiResponse({
@@ -63,6 +66,7 @@ export class TourmentParticipantsController {
     return this.tourmentParticipantsService.findOne(id);
   }
 
+  @UseGuards(AdminGuard)
   @Patch(':id')
   @ApiOperation({ summary: 'Update a tourment participant by id' })
   @ApiResponse({
@@ -81,6 +85,7 @@ export class TourmentParticipantsController {
     );
   }
 
+  @UseGuards(AdminGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a tourment participant by id' })
   @ApiResponse({

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -17,6 +18,7 @@ import { MatchsService } from './matchs.service';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
 import { MatchsEntity } from 'src/database/entities/match.entity';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @ApiTags('Matches')
 @ApiBearerAuth()
@@ -24,6 +26,7 @@ import { MatchsEntity } from 'src/database/entities/match.entity';
 export class MatchsController {
   constructor(private readonly matchsService: MatchsService) {}
 
+  @UseGuards(AdminGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new match' })
   @ApiResponse({
@@ -59,6 +62,7 @@ export class MatchsController {
     return this.matchsService.findOne(id);
   }
 
+  @UseGuards(AdminGuard)
   @Patch(':id')
   @ApiOperation({ summary: 'Update a match by id' })
   @ApiResponse({
@@ -71,6 +75,7 @@ export class MatchsController {
     return this.matchsService.update(id, updateMatchDto);
   }
 
+  @UseGuards(AdminGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a match by id' })
   @ApiResponse({

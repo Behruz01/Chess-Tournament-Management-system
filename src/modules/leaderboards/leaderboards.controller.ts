@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -17,6 +18,7 @@ import { LeaderboardsService } from './leaderboards.service';
 import { CreateLeaderboardDto } from './dto/create-leaderboard.dto';
 import { UpdateLeaderboardDto } from './dto/update-leaderboard.dto';
 import { LeaderboardEntity } from 'src/database/entities/leaderboard.entity';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @ApiTags('Leaderboards')
 @ApiBearerAuth()
@@ -24,6 +26,7 @@ import { LeaderboardEntity } from 'src/database/entities/leaderboard.entity';
 export class LeaderboardsController {
   constructor(private readonly leaderboardsService: LeaderboardsService) {}
 
+  @UseGuards(AdminGuard)
   @Post()
   @ApiOperation({ summary: 'Create a new leaderboard' })
   @ApiResponse({
@@ -59,6 +62,7 @@ export class LeaderboardsController {
     return this.leaderboardsService.findOne(id);
   }
 
+  @UseGuards(AdminGuard)
   @Patch(':id')
   @ApiOperation({ summary: 'Update a leaderboard by id' })
   @ApiResponse({
@@ -74,6 +78,7 @@ export class LeaderboardsController {
     return this.leaderboardsService.update(id, updateLeaderboardDto);
   }
 
+  @UseGuards(AdminGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a leaderboard by id' })
   @ApiResponse({
