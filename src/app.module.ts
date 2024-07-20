@@ -14,6 +14,12 @@ import { TourmentsModule } from './modules/tourments/tourments.module';
 import { AdminsModule } from './modules/admins/admins.module';
 import { AuthMiddleware } from './common/middlewares/tokenchecker.middleware';
 import { MyConfigModule } from './config/config.module';
+import { UsersEntity } from './database/entities/users.entity';
+import { PlayersEntity } from './database/entities/players.entity';
+import { TourmentEntity } from './database/entities/tourment.entity';
+import { LeaderboardEntity } from './database/entities/leaderboard.entity';
+import { MatchsEntity } from './database/entities/match.entity';
+import { TourmentParticipantsEntity } from './database/entities/tournamentParticipants.entity';
 
 @Module({
   imports: [
@@ -32,7 +38,14 @@ import { MyConfigModule } from './config/config.module';
       synchronize: true,
       logging: false,
       autoLoadEntities: true,
-      entities: [],
+      entities: [
+        UsersEntity,
+        PlayersEntity,
+        TourmentEntity,
+        LeaderboardEntity,
+        MatchsEntity,
+        TourmentParticipantsEntity,
+      ],
     }),
     AuthModule,
     TourmentsModule,

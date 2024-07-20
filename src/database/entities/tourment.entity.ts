@@ -7,7 +7,7 @@ import { LeaderboardEntity } from './leaderboard.entity';
 @Entity({ name: 'tourments' })
 export class TourmentEntity extends BaseEntity {
   @Column()
-  name: string;
+  tourment_name: string;
 
   @Column()
   start_date: Date;

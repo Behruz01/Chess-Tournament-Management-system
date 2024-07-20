@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateTourmentDto } from './dto/create-tourment.dto';
 import { UpdateTourmentDto } from './dto/update-tourment.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { TourmentEntity } from 'src/database/entities/tourment.entity';
+import { TourmentRepo } from 'src/database/repositories/tourment.repo';
 
 @Injectable()
 export class TourmentsService {
-  create(createTourmentDto: CreateTourmentDto) {
-    return 'This action adds a new tourment';
+  constructor(
+    @InjectRepository(TourmentEntity) private readonly repo: TourmentRepo,
+  ) {}
+
+  async create(createTourmentDto: CreateTourmentDto): Promise<TourmentEntity> {
+    const tourment = this.repo.create(createTourmentDto);
+    return this.repo.save(tourment);
   }
 
-  findAll() {
-    return `This action returns all tourments`;
+  async findAll(): Promise<TourmentEntity[]> {
+    return this.repo.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tourment`;
+  async findOne(id: string): Promise<TourmentEntity> {
+    const tourment = await this.repo.findOne({ where: { id } });
+    if (!tourment) {
+      throw new NotFoundException(`Tournament with ID ${id} not found`);
+    }
+    return tourment;
   }
 
-  update(id: number, updateTourmentDto: UpdateTourmentDto) {
-    return `This action updates a #${id} tourment`;
+  async update(
+    id: string,
+    updateTourmentDto: UpdateTourmentDto,
+  ): Promise<Object> {
+    const data = await this.repo.findOne({ where: { id } });
+    if (!data)
+      throw new HttpException('Data not found!', HttpStatus.BAD_REQUEST);
+    const { tourment_name, start_date, end_date } = updateTourmentDto;
+
+    await this.repo.update({ id }, { tourment_name, start_date, end_date });
+    return { message: 'Tourment updated successfully' };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tourment`;
+  async remove(id: string): Promise<Object> {
+    const result = await this.repo.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Tournament with ID ${id} not found`);
+    }
+    return { message: 'Tourment deleted successfully' };
   }
 }
