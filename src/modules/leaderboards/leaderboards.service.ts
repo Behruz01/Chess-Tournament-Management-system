@@ -45,14 +45,14 @@ export class LeaderboardsService {
       // Fetch all matches related to the tournament
       const matches = await this.matchRepo.find({
         where: { tourment: { id: tournament.id } },
-        relations: ['first_player', 'second_player'], // Ensure relationships are fetched
+        relations: ['first_player', 'second_player'],
       });
 
       const pointsMap = new Map<string, number>();
 
       matches.forEach((match) => {
         if (!match.first_player || !match.second_player) {
-          console.warn('Match missing player data:', match); // Warn if player data is missing
+          console.warn('Match missing player data:', match);
           return;
         }
 
@@ -89,7 +89,7 @@ export class LeaderboardsService {
           leaderboardEntry.rank = rank++;
           leaderboardEntries.push(leaderboardEntry);
         } else {
-          console.warn('Player not found for ID:', playerId); // Warn if player is not found
+          console.warn('Player not found for ID:', playerId);
         }
       }
 
