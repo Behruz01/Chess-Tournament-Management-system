@@ -9,14 +9,19 @@ export class PlayersEntity extends BaseEntity {
   @Column()
   player_name: string;
 
-  @Column()
+  @Column({
+    type: 'date',
+  })
   birthday: Date;
 
-  @Column()
+  @Column({ type: 'numeric' })
   rating: number;
 
   @Column()
   country: string;
+
+  @Column()
+  points: number;
 
   @OneToMany(
     () => TourmentParticipantsEntity,

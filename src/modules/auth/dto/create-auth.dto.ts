@@ -20,7 +20,7 @@ export class LoginDto {
 export class LogoutDto {
   @ApiProperty({
     example:
-      'cskjabekcnsk;ljnckjszncl;kzdjbnsc;lkndszlkcvjbdszvjbsodjbvkjnszcbn;sdklnckszd;jb',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk4ODYwODliLTU3ZjAtNDY3MS1hODM0LTEyNDQ5MjVjZWU2MiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyMTQ1NzY4NSwiZXhwIjoxNzIxNDU4Mjg1fQ.jJTVBkNTntKgaJrOw9bInsJEIoNyVk6E1bZY6cp6g20',
   })
   @IsString()
   @IsNotEmpty()

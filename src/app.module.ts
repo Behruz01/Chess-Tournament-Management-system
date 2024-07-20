@@ -20,6 +20,7 @@ import { TourmentEntity } from './database/entities/tourment.entity';
 import { LeaderboardEntity } from './database/entities/leaderboard.entity';
 import { MatchsEntity } from './database/entities/match.entity';
 import { TourmentParticipantsEntity } from './database/entities/tournamentParticipants.entity';
+import { PlayersModule } from './modules/players/players.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { TourmentParticipantsEntity } from './database/entities/tournamentPartic
     TourmentsModule,
     AdminsModule,
     MyConfigModule,
+    PlayersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
